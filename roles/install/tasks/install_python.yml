@@ -1,0 +1,25 @@
+---
+- name: install epel repository
+  yum:
+    name: epel-release
+    state: present
+
+- name: install pip and virtualenv
+  yum:
+    name: [ 'python-pip', 'python-virtualenv' ]
+    state: present
+
+- name: install virtualenvwrapper
+  pip:
+    name: virtualenvwrapper
+    state: present
+
+- name: insert/update virtualenvwrapper configuation block in .bashrc
+  blockinfile:
+    dest: /home/scripts/.bashrc
+    block: |
+      export WORKON_HOME=$HOME/.virtualenvs
+      source /usr/bin/virtualenvwrapper.sh
+
+- name: create virtualenvs directory
+  file: path=/home/scripts/.virtualenvs state=directory mode=0755 owner=scripts group=scripts

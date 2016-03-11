@@ -1,0 +1,15 @@
+---
+- name: git clone citrix-taskmaster repo
+  git: repo=https://github.com/osu-sig/citrixcc-taskmaster.git
+       dest=/home/scripts/citrix-taskmaster
+       version=fc145f335480c4067b43721a575fe6fc5cda7912
+
+- name: source virtualenvwrapper
+  shell: source /usr/bin/virtualenvwrapper.sh
+         creates=/home/scripts/.virtualenvs/initialize
+
+- name: create citrix-taskmaster virtualenv
+  shell: . /usr/bin/virtualenvwrapper.sh && mkvirtualenv citrix-taskmaster
+  args:
+    creates: /home/scripts/.virtualenvs/citrix-taskmaster
+    executable: /bin/bash

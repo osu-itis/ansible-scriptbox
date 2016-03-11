@@ -1,0 +1,13 @@
+---
+- name: create scripts unix group
+  group: name=scripts
+         state=present
+
+- name: create scripts unix user
+  user: name=scripts
+        group=scripts
+        state=present
+        comment="script user"
+        shell="/bin/bash"
+        home="/home/scripts"
+        password="{{ lookup('password', 'scripts_user.txt length=15') }}"
