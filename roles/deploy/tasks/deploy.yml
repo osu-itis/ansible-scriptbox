@@ -13,3 +13,7 @@
   args:
     creates: /home/scripts/.virtualenvs/citrix-taskmaster
     executable: /bin/bash
+
+- name: install requirements
+  pip: requirements=/home/scripts/citrix-taskmaster/requirements.txt
+       virtualenv=/home/scripts/.virtualenvs/citrix-taskmaster
