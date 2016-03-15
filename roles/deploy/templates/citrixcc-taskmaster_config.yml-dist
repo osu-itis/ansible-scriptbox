@@ -1,0 +1,3 @@
+endpoint_base: {{ citrixcc_taskmaster.endpoint_base }}
+username: {{ citrixcc_taskmaster.username }}
+password: {{ citrixcc_taskmaster.password }}

@@ -9,5 +9,5 @@
         state=present
         comment="script user"
         shell="/bin/bash"
-        home="/home/scripts"
+        home="{{ common.scripts_home }}"
         password="{{ lookup('password', 'scripts_user.txt length=15') }}"

@@ -1,4 +1,9 @@
 ---
+- name: install epel repository
+  yum:
+    name: epel-release
+    state: present
+
 - name: install git
   yum:
     name: git

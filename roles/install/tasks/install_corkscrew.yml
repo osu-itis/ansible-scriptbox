@@ -26,10 +26,12 @@
           creates=/usr/local/bin/corkscrew
 
 - name: ensure ~/.ssh exists
-  file: path=/home/scripts/.ssh owner=scripts group=scripts mode=700 state=directory
+  file: path="{{ common.scripts_home }}/.ssh"
+        owner=scripts group=scripts mode=700
+        state=directory
 
 - name: configure ssh for corkscrew
-  copy: dest=/home/scripts/.ssh/config
+  copy: dest="{{ common.scripts_home }}/.ssh/config"
         content="Host github.com\nProxyCommand corkscrew proxy.oregonstate.edu 3128 %h %p\nPort 443\nHostname ssh.github.com\n"
         owner=scripts
         group=scripts

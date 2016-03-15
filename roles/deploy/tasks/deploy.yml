@@ -1,19 +1,26 @@
 ---
-- name: git clone citrix-taskmaster repo
-  git: repo=https://github.com/osu-sig/citrixcc-taskmaster.git
-       dest=/home/scripts/citrix-taskmaster
-       version=fc145f335480c4067b43721a575fe6fc5cda7912
+- name: git clone citrixcc-taskmaster repo
+  git: repo="{{ citrixcc_taskmaster.git_repo_url }}"
+       dest="{{ common.scripts_home }}/citrixcc-taskmaster"
+       version="{{ citrixcc_taskmaster.version }}"
+
+- name: create config.yml
+  template: dest="{{ common.scripts_home }}/citrixcc-taskmaster/config.yml"
+            src=citrixcc-taskmaster_config.yml-dist
+            owner=scripts
+            group=scripts
+            mode=600
 
 - name: source virtualenvwrapper
   shell: source /usr/bin/virtualenvwrapper.sh
-         creates=/home/scripts/.virtualenvs/initialize
+         creates="{{ common.scripts_home }}/.virtualenvs/initialize"
 
-- name: create citrix-taskmaster virtualenv
-  shell: . /usr/bin/virtualenvwrapper.sh && mkvirtualenv citrix-taskmaster
+- name: create citrixcc-taskmaster virtualenv
+  shell: . /usr/bin/virtualenvwrapper.sh && mkvirtualenv citrixcc-taskmaster
   args:
-    creates: /home/scripts/.virtualenvs/citrix-taskmaster
+    creates: "{{ common.scripts_home }}/.virtualenvs/citrixcc-taskmaster"
     executable: /bin/bash
 
 - name: install requirements
-  pip: requirements=/home/scripts/citrix-taskmaster/requirements.txt
-       virtualenv=/home/scripts/.virtualenvs/citrix-taskmaster
+  pip: requirements="{{ common.scripts_home }}/citrixcc-taskmaster/requirements.txt"
+       virtualenv="{{ common.scripts_home }}/.virtualenvs/citrixcc-taskmaster"
