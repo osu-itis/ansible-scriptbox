@@ -1,5 +1,7 @@
 # ansible-scriptbox
 
+[![Build Status](https://jenkins.sig.oregonstate.edu/job/lint%20ansible-scriptbox/badge/icon)](https://jenkins.sig.oregonstate.edu/job/lint%20ansible-scriptbox/)
+
 Ansible playbook for a generic script hosting box. This replaces `vaccessbuild`.
 
 ## What Does This Playbook Do Exactly?
