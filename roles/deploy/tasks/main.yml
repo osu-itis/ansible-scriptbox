@@ -1,2 +1,3 @@
 ---
-- include: deploy.yml
+- include: deploy_citrixcc_taskmaster.yml
+- include: deploy_vmware_rbscripts.yml

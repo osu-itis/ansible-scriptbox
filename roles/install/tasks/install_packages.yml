@@ -8,3 +8,8 @@
   yum:
     name: git
     state: present
+
+- name: install packages required for building ruby
+  yum:
+    name: [ 'gcc', 'bzip2', 'openssl-devel', 'libyaml-devel', 'libffi-devel', 'readline-devel', 'zlib-devel', 'gdbm-devel', 'ncurses-devel' ]
+    state: present

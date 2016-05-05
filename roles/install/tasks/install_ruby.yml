@@ -1,0 +1,25 @@
+---
+- name: install rbenv
+  git: repo=https://github.com/rbenv/rbenv.git
+       dest="{{ common.scripts_home }}/.rbenv"
+       version=v1.0.0
+
+- name: compile dynamic bash extension
+  command: cd {{ common.scripts_home }}/.rbenv && src/configure && make -C src
+
+- name: insert/update rbenv block in .bashrc
+  blockinfile:
+    dest: "{{ common.scripts_home }}/.bashrc"
+    block: |
+      export PATH="$HOME/.rbenv/bin:$PATH"
+      eval "$(rbenv init -)"
+
+- name: install ruby-build plugin
+  git: repo=https://github.com/rbenv/ruby-build.git
+       dest="{{ common.scripts_home }}/.rbenv/plugins/ruby-build"
+       version=v20160426
+
+- name: install ruby
+  shell: source $HOME/.bashrc && rbenv install {{ common.ruby_version }}
+  args:
+    creates: "{{ common.scripts_home }}/.rbenv/versions/{{ common.ruby_version}}/bin/ruby"

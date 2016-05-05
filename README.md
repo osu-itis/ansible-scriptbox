@@ -8,7 +8,9 @@ Ansible playbook for a generic script hosting box. This replaces `vaccessbuild`.
 
 * configures CentOS, creates script user account, installs git and corkscrew
 * installs and configures Python and virtualenvs
+* installs and configures rbenv and ruby
 * deploys `citrixcc-taskmaster` script
+* deploys `vmware-rbscripts`
 
 ## Configuration
 
@@ -24,6 +26,9 @@ citrixcc_taskmaster:
     endpoint_base: "https://cmdctrhost.someplace.edu/nitro/v1/"
     username: changeme
     password: changeme
+vmware_rbscripts:
+    git_repo_url: "https://github.com/osu-sig/vmware-rbscripts.git"
+    version: changeme_to_sha1_hash_or_tag_name
 ```
 
 ## Usage
@@ -36,8 +41,3 @@ citrixcc_taskmaster:
 $ cd ansible-scriptbox
 $ ansible-playbook -i hosts site.yml
 ```
-
-## TODO
-
-* install and configure Ruby and rbenv
-* deploy `vmware-rbscripts`
