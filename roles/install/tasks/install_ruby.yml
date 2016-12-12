@@ -1,25 +1,32 @@
+# install ruby environment
+#
+# this task runs as the jenkins user
 ---
 - name: install rbenv
   git: repo=https://github.com/rbenv/rbenv.git
-       dest="{{ common.scripts_home }}/.rbenv"
+       dest="{{ common.jenkins_home }}/.rbenv"
        version=v1.0.0
 
 - name: compile dynamic bash extension
-  command: cd {{ common.scripts_home }}/.rbenv && src/configure && make -C src
+  shell: src/configure && make -C src
+  args:
+    chdir: "{{ common.jenkins_home }}/.rbenv/"
+    creates: "{{ common.jenkins_home }}/.rbenv/src/realpath.o"
 
 - name: insert/update rbenv block in .bashrc
   blockinfile:
-    dest: "{{ common.scripts_home }}/.bashrc"
+    dest: "{{ common.jenkins_home }}/.bashrc"
     block: |
       export PATH="$HOME/.rbenv/bin:$PATH"
       eval "$(rbenv init -)"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: rbenv"
 
 - name: install ruby-build plugin
   git: repo=https://github.com/rbenv/ruby-build.git
-       dest="{{ common.scripts_home }}/.rbenv/plugins/ruby-build"
+       dest="{{ common.jenkins_home }}/.rbenv/plugins/ruby-build"
        version=v20160426
 
 - name: install ruby
   shell: source $HOME/.bashrc && rbenv install {{ common.ruby_version }}
   args:
-    creates: "{{ common.scripts_home }}/.rbenv/versions/{{ common.ruby_version}}/bin/ruby"
+    creates: "{{ common.jenkins_home }}/.rbenv/versions/{{ common.ruby_version}}/bin/ruby"

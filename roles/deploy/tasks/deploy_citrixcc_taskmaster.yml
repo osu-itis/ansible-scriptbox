@@ -1,26 +1,32 @@
+# deploy citrixcc_taskmaster
+# this task runs as the jenkins user
 ---
 - name: git clone citrixcc-taskmaster repo
   git: repo="{{ citrixcc_taskmaster.git_repo_url }}"
-       dest="{{ common.scripts_home }}/citrixcc-taskmaster"
+       dest="{{ common.scripts_dir }}/citrixcc-taskmaster"
        version="{{ citrixcc_taskmaster.version }}"
 
 - name: create config.yml
-  template: dest="{{ common.scripts_home }}/citrixcc-taskmaster/config.yml"
+  template: dest="{{ common.scripts_dir }}/citrixcc-taskmaster/config.yml"
             src=citrixcc-taskmaster_config.yml-dist
-            owner=scripts
-            group=scripts
-            mode=600
+            owner=jenkins
+            group=jenkins
+            mode=0600
 
 - name: source virtualenvwrapper
   shell: source /usr/bin/virtualenvwrapper.sh
-         creates="{{ common.scripts_home }}/.virtualenvs/initialize"
+  args:
+    creates: "{{ common.jenkins_home }}/.virtualenvs/initialize"
+  tags:
+    # disable ansible-lint check because this command really does need to be run in a shell
+    - skip_ansible_lint
 
 - name: create citrixcc-taskmaster virtualenv
   shell: . /usr/bin/virtualenvwrapper.sh && mkvirtualenv citrixcc-taskmaster
   args:
-    creates: "{{ common.scripts_home }}/.virtualenvs/citrixcc-taskmaster"
+    creates: "{{ common.jenkins_home }}/.virtualenvs/citrixcc-taskmaster"
     executable: /bin/bash
 
 - name: install requirements
-  pip: requirements="{{ common.scripts_home }}/citrixcc-taskmaster/requirements.txt"
-       virtualenv="{{ common.scripts_home }}/.virtualenvs/citrixcc-taskmaster"
+  pip: requirements="{{ common.scripts_dir }}/citrixcc-taskmaster/requirements.txt"
+       virtualenv="{{ common.jenkins_home }}/.virtualenvs/citrixcc-taskmaster"
