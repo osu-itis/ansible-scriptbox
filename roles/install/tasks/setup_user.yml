@@ -1,13 +1,23 @@
 ---
-- name: create scripts unix group
-  group: name=scripts
-         state=present
+- name: create scripts dir
+  file: path={{ common.scripts_dir }}
+        state=directory
+        owner=jenkins
+        group=jenkins
+        mode=0755
 
-- name: create scripts unix user
-  user: name=scripts
-        group=scripts
-        state=present
-        comment="script user"
-        shell="/bin/bash"
-        home="{{ common.scripts_home }}"
-        password="{{ lookup('password', 'scripts_user.txt length=15') }}"
+- name: create .bashrc if necessary
+  copy: dest="{{ common.jenkins_home }}/.bashrc"
+        src=.bashrc
+        force=no
+        owner=jenkins
+        group=jenkins
+        mode=0644
+
+- name: create .bash_profile if necessary
+  copy: dest="{{ common.jenkins_home }}/.bash_profile"
+        content="source .bashrc"
+        force=no
+        owner=jenkins
+        group=jenkins
+        mode=0644

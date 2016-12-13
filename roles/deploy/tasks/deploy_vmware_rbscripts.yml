@@ -1,24 +1,19 @@
+# deploy vmware-rbscripts
+# this task runs as the jenkins user
 ---
 - name: git clone vmware-rbscripts repo
   git: repo="{{ vmware_rbscripts.git_repo_url }}"
-       dest="{{ common.scripts_home }}/vmware-rbscripts"
+       dest="{{ common.scripts_dir }}/vmware-rbscripts"
        version="{{ vmware_rbscripts.version }}"
 
 - name: install bundler gem
   shell: source $HOME/.bashrc && gem install bundler
   args:
-    chdir: "{{ common.scripts_home }}/vmware-rbscripts"
+    chdir: "{{ common.scripts_dir }}/vmware-rbscripts"
+  changed_when: false
 
 - name: install required gems
   shell: source $HOME/.bashrc && bundle install
   args:
-    chdir: "{{ common.scripts_home }}/vmware-rbscripts"
-
-- name: create log dir
-  file: path="{{ common.scripts_home }}/log"
-        owner=scripts group=scripts mode=744
-        state=directory
-
-- cron: name="checklogin.rb" minute="*/5" job="{{ common.scripts_home }}/vmware-rbscripts/bin/run-checklogin.sh >>{{ common.scripts_home }}/log/checklogin.log 2>&1"
-- cron: name="vmreport.rb" minute="0" hour="8" weekday="1" job="{{ common.scripts_home }}/vmware-rbscripts/bin/run-vmreport.sh >>{{ common.scripts_home }}/log/vmreport.log 2>&1"
-- cron: name="findTemplateLockingVMs.rb" minute="0" hour="0,8,12,16" job="{{ common.scripts_home }}/vmware-rbscripts/bin/run-findTemplateLockingVMs.sh >>{{ common.scripts_home }}/log/findtemplatelocks.log 2>&1"
+    chdir: "{{ common.scripts_dir }}/vmware-rbscripts"
+  changed_when: false

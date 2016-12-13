@@ -2,7 +2,6 @@
 - include: setup_user.yml
 - include: install_packages.yml
 - include: install_python.yml
-- include: install_corkscrew.yml
 - include: install_ruby.yml
   become: yes
-  become_user: scripts
+  become_user: jenkins

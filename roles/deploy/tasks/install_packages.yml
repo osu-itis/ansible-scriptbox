@@ -1,0 +1,7 @@
+# install any required packages
+# this script runs as root
+---
+- name: install required packages
+  yum:
+    name: jq
+    state: present

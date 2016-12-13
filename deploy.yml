@@ -2,7 +2,5 @@
 - hosts: all
   gather_facts: yes
   remote_user: root
-  become: yes
-  become_user: scripts
   roles:
     - deploy
