@@ -5,3 +5,5 @@
 - include: install_ruby.yml
   become: yes
   become_user: jenkins
+- include: install_perl.yml
+  tags: [ perl ]
