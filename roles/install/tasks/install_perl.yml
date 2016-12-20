@@ -1,0 +1,64 @@
+---
+- name: install required packages
+  yum:
+    name: [ 'gcc', 'perl-App-cpanminus', 'unixODBC' ]
+    state: present
+
+- name: install module packages
+  yum:
+    name: [ 'perl-DBI', 'perl-DBD-MySQL', 'perl-File-Touch', 'perl-Text-CSV', 'perl-Net-SNMP' ]
+    state: present
+
+- name: copy oracle instant client packages
+  copy:
+    src: "/tmp/{{ item }}"
+    dest: "/tmp/{{ item }}"
+    mode: 0644
+  with_items: "{{ common.oracle_instantclient_packages }}"
+
+- name: install oracle instant client packages
+  yum:
+    name: "/tmp/{{ item }}"
+    state: present
+  with_items: "{{ common.oracle_instantclient_packages }}"
+
+- name: fix permissions on library files
+  file:
+    path: "{{ item }}"
+    mode: 0755
+  with_items:
+    - /usr/lib/oracle/11.2/client64/lib/libclntsh.so.11.1
+    - /usr/lib/oracle/11.2/client64/lib/libnnz11.so
+    - /usr/lib/oracle/11.2/client64/lib/libocci.so.11.1
+    - /usr/lib/oracle/11.2/client64/lib/libociei.so
+    - /usr/lib/oracle/11.2/client64/lib/libocijdbc11.so
+    - /usr/lib/oracle/11.2/client64/lib/libsqlplusic.so
+    - /usr/lib/oracle/11.2/client64/lib/libsqlplus.so
+    - /usr/lib/oracle/11.2/client64/lib/libsqora.so.11.1
+
+# the following is required to work around this bug:
+# https://bugzilla.redhat.com/show_bug.cgi?id=498311
+- name: create symlink to libodbcinst.so.1
+  file:
+    src: /usr/lib64/libodbcinst.so.2
+    dest: /usr/lib64/libodbcinst.so.1
+    owner: root
+    group: root
+    state: link
+
+- name: insert/update virtualenvwrapper configuation block in .bashrc
+  blockinfile:
+    dest: "/etc/bashrc"
+    block: |
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/oracle/11.2/client64/lib
+      export ORACLE_HOME=/usr/lib/oracle/11.2/client64
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: oracle_ld_library_path"
+
+- name: install modules via CPAN
+  cpanm:
+    name: "{{ item }}"
+  with_items:
+    - File::Rsync
+    - Net::LDAP
+    - DBD::Oracle
+    - Net::SMTP
