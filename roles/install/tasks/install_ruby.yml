@@ -5,7 +5,7 @@
 - name: install rbenv
   git: repo=https://github.com/rbenv/rbenv.git
        dest="{{ common.jenkins_home }}/.rbenv"
-       version=v1.0.0
+       version=v1.1.1
 
 - name: compile dynamic bash extension
   shell: src/configure && make -C src
@@ -24,7 +24,7 @@
 - name: install ruby-build plugin
   git: repo=https://github.com/rbenv/ruby-build.git
        dest="{{ common.jenkins_home }}/.rbenv/plugins/ruby-build"
-       version=v20160426
+       version=v20171226
 
 - name: install ruby
   shell: source $HOME/.bashrc && rbenv install {{ common.ruby_version }}

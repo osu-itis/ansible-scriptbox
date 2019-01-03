@@ -2,8 +2,10 @@
 - include: setup_user.yml
 - include: install_packages.yml
 - include: install_python.yml
+  tags: [ python ]
 - include: install_ruby.yml
   become: yes
   become_user: jenkins
+  tags: [ ruby ]
 - include: install_perl.yml
   tags: [ perl ]
