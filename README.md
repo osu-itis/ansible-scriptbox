@@ -1,7 +1,5 @@
 # ansible-scriptbox
 
-[![Build Status](https://jenkins.sig.oregonstate.edu/job/lint%20ansible-scriptbox/badge/icon)](https://jenkins.sig.oregonstate.edu/job/lint%20ansible-scriptbox/)
-
 Ansible playbook for setting up Jenkins as a script hosting box.
 
 ## What Does This Playbook Do Exactly?
@@ -71,7 +69,7 @@ jenk-slave-vs01.someplace.edu
 $ ansible-playbook -i inventory/stage site.yml --limit newhost.someplace.edu
 ```
 
-If you do not limit by hostname, the playbook will run on all hosts in the environment, which is probably not what you want.
+**If you do not limit by hostname, the playbook will run on all hosts in the environment, which is probably not what you want.**
 
 ### Update Script Deployments on Hosts
 
@@ -83,8 +81,10 @@ $ ansible-playbook -i inventory/stage deploy.yml
 
 ### Install a Specific Language Environment on a Specific Host
 
+By default, this playbook will install all language environments (python, ruby, perl) on all hosts. You can choose specific environments to install on specific hosts using the `-l` and `-t` flags.
+
 * Use the `-l` flag to specify the target host. If not defined, the playbook will run on all hosts in the inventory file.
-* Use the `-t` flag to specify the environment to install. Supported values are: `perl`
+* Use the `-t` flag to specify the environment to install. Supported values are: `perl`, `ruby`, `python`
 
 ```
 $ ansible-playbook -i inventory/stage site.yml -l targethost.someplace.edu -t perl
