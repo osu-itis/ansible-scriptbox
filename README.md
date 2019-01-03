@@ -52,6 +52,15 @@ Example inventory file:
 [stage]
 jenk-vs01.someplace.edu
 jenk-slave-vs01.someplace.edu
+
+[ruby]
+jenk-vs01.someplace.edu
+
+[python]
+jenk-vs01.someplace.edu
+
+[perl]
+jenk-slave-vs01.someplace.edu
 ```
 
 ## Usage
@@ -69,11 +78,11 @@ jenk-slave-vs01.someplace.edu
 $ ansible-playbook -i inventory/stage site.yml --limit newhost.someplace.edu
 ```
 
-**If you do not limit by hostname, the playbook will run on all hosts in the environment, which is probably not what you want.**
+**IMPORTANT: If you do not limit by hostname, the playbook will run on all hosts in the environment, which is probably not what you want.**
 
 ### Update Script Deployments on Hosts
 
-1. Run ansible-playbook on the appropriate inventory file:
+Run ansible-playbook on the appropriate inventory file:
 
 ```
 $ ansible-playbook -i inventory/stage deploy.yml
@@ -81,11 +90,6 @@ $ ansible-playbook -i inventory/stage deploy.yml
 
 ### Install a Specific Language Environment on a Specific Host
 
-By default, this playbook will install all language environments (python, ruby, perl) on all hosts. You can choose specific environments to install on specific hosts using the `-l` and `-t` flags.
+By default, this playbook will not install any language environments on hosts. You can choose specific environments to install by editing the `inventory` file. See example above.
 
-* Use the `-l` flag to specify the target host. If not defined, the playbook will run on all hosts in the inventory file.
-* Use the `-t` flag to specify the environment to install. Supported values are: `perl`, `ruby`, `python`
-
-```
-$ ansible-playbook -i inventory/stage site.yml -l targethost.someplace.edu -t perl
-```
+Allowed language environment group names are: `ruby`, `python`, `perl`
