@@ -14,3 +14,15 @@
     name: [ 'gcc', 'bzip2', 'openssl-devel', 'libyaml-devel', 'libffi-devel', 'readline-devel', 'zlib-devel', 'gdbm-devel', 'ncurses-devel' ]
     state: present
   when: "'ruby' in group_names"
+
+- name: install Development Tools package group
+  yum:
+    name: "@Development Tools"
+    state: present
+  when: "'python' in group_names"
+
+- name: install packages required for building python
+  yum:
+    name: [ 'gcc', 'zlib-devel', 'readline-devel', 'sqlite-devel', 'openssl-devel', 'bzip2-devel' ]
+    state: present
+  when: "'python' in group_names"
