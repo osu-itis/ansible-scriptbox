@@ -1,8 +1,8 @@
 ---
-- include: install_packages.yml
-- include: deploy_citrixcc_taskmaster.yml
+- import_tasks: install_packages.yml
+- import_tasks: deploy_citrixcc_taskmaster.yml
   become: yes
   become_user: jenkins
-- include: deploy_vmware_rbscripts.yml
+- import_tasks: deploy_vmware_rbscripts.yml
   become: yes
   become_user: jenkins

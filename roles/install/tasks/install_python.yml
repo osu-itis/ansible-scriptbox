@@ -1,36 +1,33 @@
 # install python environment
+#
+# this task runs as the jenkins user
 ---
-- block:
-  - name: install pyenv
-    git:
-      repo: "https://github.com/pyenv/pyenv.git"
-      dest: "{{ common.jenkins_home }}/.pyenv"
-      version: "{{ pyenv.version }}"
+- name: install pyenv
+  git:
+    repo: "https://github.com/pyenv/pyenv.git"
+    dest: "{{ common.jenkins_home }}/.pyenv"
+    version: "{{ pyenv.version }}"
 
-  - name: insert/update pyenv block in .bashrc
-    blockinfile:
-      dest: "{{ common.jenkins_home }}/.bashrc"
-      block: |
-        export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        if command -v pyenv 1>/dev/null 2>&1; then
-          eval "$(pyenv init -)"
-        fi
-        source $PYENV_ROOT/completions/pyenv.bash
-      marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
+- name: insert/update pyenv block in .bashrc
+  blockinfile:
+    dest: "{{ common.jenkins_home }}/.bashrc"
+    block: |
+      export PYENV_ROOT="$HOME/.pyenv"
+      export PATH="$PYENV_ROOT/bin:$PATH"
+      if command -v pyenv 1>/dev/null 2>&1; then
+      eval "$(pyenv init -)"
+      fi
+      source $PYENV_ROOT/completions/pyenv.bash
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: pyenv"
 
-  - name: install python
-    shell: source {{ common.jenkins_home }}/.bashrc && pyenv install {{ common.python_version }}
-    args:
-      executable: /bin/bash
-      creates: "{{ common.jenkins_home }}/.pyenv/versions/{{ common.python_version}}/bin/python"
+- name: install python
+  shell: source {{ common.jenkins_home }}/.bashrc && pyenv install {{ common.python_version }}
+  args:
+    executable: /bin/bash
+    creates: "{{ common.jenkins_home }}/.pyenv/versions/{{ common.python_version}}/bin/python"
 
-  - name: install pyenv-virtualenvwrapper
-    git:
-      repo: "https://github.com/pyenv/pyenv-virtualenvwrapper.git"
-      dest: "{{ common.jenkins_home }}/.pyenv/plugins/pyenv-virtualenvwrapper"
-      version: "{{ pyenv.virtualenvwrapper_plugin_version }}"
-
-  become: yes
-  become_user: jenkins
-# end of block
+- name: install pyenv-virtualenvwrapper
+  git:
+    repo: "https://github.com/pyenv/pyenv-virtualenvwrapper.git"
+    dest: "{{ common.jenkins_home }}/.pyenv/plugins/pyenv-virtualenvwrapper"
+    version: "{{ pyenv.virtualenvwrapper_plugin_version }}"
